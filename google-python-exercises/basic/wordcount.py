@@ -38,13 +38,45 @@ print_words() and print_top().
 """
 
 import sys
-
+from functools import cmp_to_key
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
+def word_sort(filename, cmp=None):
+  f = open(filename)
+  words = f.read()
+  l = words.split()
+  d = {}
+  for word in l:
+    if d.has_key(word.lower()):
+      d[word.lower()] += 1
+    else:
+      d[word.lower()] = 1
+  out = d.items()
+  out.sort(key=functools.cmp_to_key(cmp))
+  return out
 
+def print_words(filename):
+  out = word_sort(filename)
+  for word in out:
+    print(word[0] + " " + str(word[1]))
+  return
+
+def print_top(filename):
+  def compa(a,b):
+    if a[1] < b[1]:
+      return 1
+    return -1
+
+  out = word_sort(filename, compa)
+  for i in range(20):
+    if i == len(out):
+      break
+    word = out[i]
+    print(out)
+  return
 ###
 
 # This basic command line argument parsing code is provided and
