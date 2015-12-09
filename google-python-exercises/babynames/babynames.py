@@ -33,7 +33,6 @@ Suggested milestones for incremental development:
  -Build the [year, 'name rank', ... ] list and print it
  -Fix main() to use the extract_names list
 """
-
 def extract_names(filename):
   """
   Given a file name for baby.html, returns a list starting with the year string
@@ -41,17 +40,37 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
-  return
+  names_and_ranks = []
 
+  f = open(filename)
+  while True:
+    readed = f.readline()
+    if readed == "": break
+    finds = re.search(r"<td>(\w+)</td><td>(\w+)</td><td>(\w+)", readed)
+    try:
+      names_and_ranks.append(finds.group(2) + " " + str(finds.group(1)))
+      names_and_ranks.append(finds.group(3) + " " + str(finds.group(1)))
+    except:
+      pass
+    if finds != None: 
+      continue
 
-def main():
+    year_match = re.search(r"<h3 align=\"center\">Popularity in (\d+)</h3>", 
+      readed)
+    if year_match != None:
+      year = year_match.group(1)
+
+  f.close()
+  names_and_ranks.sort()
+  return [year] + names_and_ranks
+
+def main(args):
   # This command-line parsing code is provided.
   # Make a list of command line arguments, omitting the [0] element
   # which is the script itself.
-  args = sys.argv[1:]
 
   if not args:
-    print 'usage: [--summaryfile] file [file ...]'
+    print('usage: [--summaryfile] file [file ...]')
     sys.exit(1)
 
   # Notice the summary flag and remove it from args if it is present.
@@ -63,6 +82,22 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+  for record in args:
+    data = extract_names(record)
+
+    if summary == False:
+      print(str(data))
+      continue
+
+    out_file = open(record + ".data", "w")
+    for line in data:
+      out_file.write(str(line) + "\n")
+    out_file.close()
+
+  return
   
 if __name__ == '__main__':
-  main()
+  #args = sys.argv[1:]
+  #quick conversion so I can simulate inputs from cli
+  args = ['--summaryfile', 'baby1990.html', 'baby2000.html' ]
+  main(args)
