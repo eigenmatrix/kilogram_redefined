@@ -1,4 +1,2 @@
-# kilogram
-The kilogram is the unit of mass; it is equal to the mass of the international prototype of the kilogram.
-
-Project Euler Solutions and other Python Exercises
+# kilogram_redefined
+The old kilogram stopped working...so heres a newer one
