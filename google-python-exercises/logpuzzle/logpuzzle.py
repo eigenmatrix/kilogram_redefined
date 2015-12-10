@@ -10,6 +10,7 @@ import os
 import re
 import sys
 import urllib.request
+import functools
 
 """Logpuzzle exercise
 Given an apache logfile, find the puzzle urls and download the images.
@@ -24,7 +25,7 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
-  # re_str = "((?:(?:[\/][^\/^\s]+)+\w)\.jpg)"
+  # re_str = "((?:(?:[\/][^\/^\s]+)+\w)(\.jpg))"
   re_str = "GET (.+) HTTP"
   try:
     log = open(filename)
@@ -38,11 +39,25 @@ def read_urls(filename):
   while True:
     line = log.readline()
     if line == "": break
-    if line.find('puzzle') != -1:
+    if line.find('images/puzzle') != -1:
       l.append(url_head + re.search(re_str, line).group(1))
 
   l = list(set(l))
-  l.sort()
+  
+  #handling Part C solution
+  image_name = l[0][l[0].rfind('/') + 1:]
+  if image_name.count('-') > 1:
+    def compa(a,b):
+      a_obj = re.search("-\w+-(\w+).jpg", a)
+      b_obj = re.search("-\w+-(\w+).jpg", b)
+
+      if a_obj.group(1) > b_obj.group(1):
+        return 1
+      return -1
+    c_sort = sorted(l, key = functools.cmp_to_key(compa))
+    return c_sort
+  else:
+    l.sort()
   return l
   
 
@@ -77,8 +92,6 @@ def download_images(img_urls, dest_dir):
   
 
 def main(args):
-  
-
   if not args:
     print('usage: [--todir dir] logfile ')
     sys.exit(1)
@@ -92,6 +105,7 @@ def main(args):
 
   if todir:
     download_images(img_urls, todir)
+    pass
   else:
     print('\n'.join(img_urls))
 
