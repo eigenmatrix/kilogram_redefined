@@ -36,9 +36,7 @@ def read_urls(filename):
   l = []
   url = re.search("_(.+)", filename)
   url_head = "http://" + url.group(1)
-  while True:
-    line = log.readline()
-    if line == "": break
+  for line in log:
     if line.find('images/puzzle') != -1:
       l.append(url_head + re.search(re_str, line).group(1))
 
@@ -75,17 +73,17 @@ def download_images(img_urls, dest_dir):
   except:
     print("mkdir failed")
 
+  html = open(dest_dir + "/page.html", 'w')
+  html.write('<html>\n<body>\n')
+
   count = 0
   for url in img_urls:
     print("saving " + url)
     pic_loc, headers = urllib.request.urlretrieve(url, 
       filename = (dest_dir + "/img" + str(count)))
+    html.write("<img src=\"img" + str(count) + "\">")
     count += 1
 
-  html = open(dest_dir + "/page.html", 'w')
-  html.write('<html>\n<body>\n')
-  for i in range(count):
-    html.write("<img src=\"img" + str(i) + "\">")
   html.write('\n</html>\n</body>')
   html.close()
   return
