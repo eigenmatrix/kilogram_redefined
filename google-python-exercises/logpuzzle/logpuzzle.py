@@ -9,7 +9,7 @@
 import os
 import re
 import sys
-import urllib
+import urllib.request
 
 """Logpuzzle exercise
 Given an apache logfile, find the puzzle urls and download the images.
@@ -18,13 +18,32 @@ Here's what a puzzle url looks like:
 10.254.254.28 - - [06/Aug/2007:00:13:48 -0700] "GET /~foo/puzzle-bar-aaab.jpg HTTP/1.0" 302 528 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6"
 """
 
-
 def read_urls(filename):
   """Returns a list of the puzzle urls from the given log file,
   extracting the hostname from the filename itself.
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
+  # re_str = "((?:(?:[\/][^\/^\s]+)+\w)\.jpg)"
+  re_str = "GET (.+) HTTP"
+  try:
+    log = open(filename)
+  except:
+    print("Log not found")
+    return
+
+  l = []
+  url = re.search("_(.+)", filename)
+  url_head = "http://" + url.group(1)
+  while True:
+    line = log.readline()
+    if line == "": break
+    if line.find('puzzle') != -1:
+      l.append(url_head + re.search(re_str, line).group(1))
+
+  l = list(set(l))
+  l.sort()
+  return l
   
 
 def download_images(img_urls, dest_dir):
@@ -36,13 +55,32 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
+  try:
+    os.mkdir(dest_dir)
+  except:
+    print("mkdir failed")
+
+  count = 0
+  for url in img_urls:
+    print("saving " + url)
+    pic_loc, headers = urllib.request.urlretrieve(url, 
+      filename = (dest_dir + "/img" + str(count)))
+    count += 1
+
+  html = open(dest_dir + "/page.html", 'w')
+  html.write('<html>\n<body>\n')
+  for i in range(count):
+    html.write("<img src=\"img" + str(i) + "\">")
+  html.write('\n</html>\n</body>')
+  html.close()
+  return
   
 
-def main():
-  args = sys.argv[1:]
+def main(args):
+  
 
   if not args:
-    print 'usage: [--todir dir] logfile '
+    print('usage: [--todir dir] logfile ')
     sys.exit(1)
 
   todir = ''
@@ -55,7 +93,9 @@ def main():
   if todir:
     download_images(img_urls, todir)
   else:
-    print '\n'.join(img_urls)
+    print('\n'.join(img_urls))
 
 if __name__ == '__main__':
-  main()
+  #args = sys.argv[1:]
+  args = ['--todir', 'imgs', 'place_code.google.com']
+  main(args)
