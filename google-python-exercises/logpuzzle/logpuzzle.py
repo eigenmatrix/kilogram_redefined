@@ -50,10 +50,10 @@ def read_urls(filename):
     def compa(a,b):
       a_obj = re.search("-\w+-(\w+).jpg", a)
       b_obj = re.search("-\w+-(\w+).jpg", b)
-
       if a_obj.group(1) > b_obj.group(1):
         return 1
       return -1
+
     c_sort = sorted(l, key = functools.cmp_to_key(compa))
     return c_sort
   else:
@@ -105,7 +105,6 @@ def main(args):
 
   if todir:
     download_images(img_urls, todir)
-    pass
   else:
     print('\n'.join(img_urls))
 
