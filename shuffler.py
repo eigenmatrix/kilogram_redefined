@@ -4,7 +4,6 @@ offset = 2
 count = 50000
 
 data_bot = [0]*size
-cards = list(xrange(size))
 
 for x in range(count):
 	cards = list(xrange(size))
