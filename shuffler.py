@@ -1,34 +1,30 @@
 import random
-size = 5
-size = size * 2
-count = 1000
-data_end = [0]*size
+size = 7
+offset = 2
+count = 50000
+
 data_bot = [0]*size
 cards = list(xrange(size))
 
 for x in range(count):
+	cards = list(xrange(size))
 	for i in xrange(size):
 		swap = random.randint(i,size-1)
 		cards[i], cards[swap] = cards[swap], cards[i]
-	data_end[cards[size-1]] += 1
-	data_bot[cards[0]] += 1
+	data_bot[cards[size-offset]] += 1
 
-print(data_bot)
-print(data_end)
-
-data_end = [0]*size
+data_prev = data_bot[:]
 data_bot = [0]*size
-cards = list(xrange(size))
+
 for x in range(count):
+	cards = list(xrange(size))
 	for i in xrange(size):
 		swap = random.randint(0,size-1)
 		cards[i], cards[swap] = cards[swap], cards[i]
-	data_end[cards[size-1]] += 1
-	data_bot[cards[0]] += 1
-print("")
-print(data_bot)
-print(data_end)
+	data_bot[cards[size-offset]] += 1
 
-print("In conclusion, insufficient data for a meaningful answer.")
+print("Deviations from expected:")
+for a in xrange(size):
+	print(((float)(data_bot[a]) - (float)(count)/size)/count * 100)
 
 
