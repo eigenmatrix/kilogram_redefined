@@ -16,7 +16,7 @@ def reverse(node):
 node = None
 for i in range(10):
 	node = ll(i, node)
-	print i
+
 node_origin = node
 while True:
 	print node, node.data
