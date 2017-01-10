@@ -7,19 +7,12 @@ class Solution(object):
       """
       d = {}
       pos = 0
-      half = target/2
-      for n in nums:
-        if not(n in d):
-          d[n] = pos
-        else:
-          if n == half:
-            return [d[n],pos]
-        pos += 1
-        
       for n in nums:
         c = target - n
-        if c == n:
-          continue
-        elif (c in d) and (n in d):      
-          return [d[c], d[n]]
+        if (c in d):
+         return [d[c], pos]
+        d[n] = pos
+        pos += 1
+      return [None]
+
 
