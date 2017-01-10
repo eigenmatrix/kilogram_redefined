@@ -11,22 +11,22 @@ class Solution(object):
         ax_start = bx_start = xx_start = None
         while head != None:
           if head.val < x:
-            if bx == None:
+            if bx != None:
+		      bx.next = head
+            else:
               bx_start = head
-            else:
-              bx.next = head
             bx = head
-          elif head.val < x:
-            if ax == None:
-              ax_start = head
-            else:
+          elif head.val > x:
+            if ax != None:
               ax.next = head
+            else:
+              ax_start = head
             ax = head
           else:
-            if xx == None:
-              xx_start = head
-            else:
+            if xx != None:
               xx.next = head
+            else:
+              xx_start = head
             xx = head
           head = head.next
 
@@ -36,7 +36,6 @@ class Solution(object):
           xx.next = ax_start
         if ax_start != None:
           ax.next = None
-
         if bx_start != None:
           return bx_start
         if xx_start != None:
