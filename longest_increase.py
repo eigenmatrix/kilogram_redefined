@@ -1,7 +1,11 @@
-data = [10, 9, 2, 5, 3, 7, 101, 18]
-data = [9, 5, 2, 8, 7, 3, 1, 6, 4, 5]
-data = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
+import random
+#data = [10, 9, 2, 5, 3, 7, 101, 18]
+#data = [9, 5, 2, 8, 7, 3, 1, 6, 4, 5]
+#data = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
 
+data = []
+for i in range(30):
+  data = data + [random.randrange(0,50)] 
 bins = [None] * len(data)
 
 for i in data:
@@ -24,6 +28,7 @@ for i in data:
   
 for b in bins:
   if b == None:
+    print(data)
     print(prev)
     exit()
   prev = b
