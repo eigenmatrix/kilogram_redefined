@@ -18,7 +18,7 @@ for i in data:
       bins[b] = bins[b-1] + [i]
       break
     elif i < binn[-1]:
-      if b == 0 or i > binn[-1]:
+      if b == 0 or i > binn[-2]:
         binn[-1] = i
       continue
   
